@@ -1,22 +1,24 @@
-const   Manager     =   require("./lib/manger");
-const   Engineer    =   require("./lib/engineer");
-const   Intern      =   require("./lib/intern");
-const   inquirer    =   require("inquirer");
-const   path        =   require("path");
-const   fs          =   require("fs");
+const   Manager     =   require("./lib/manager");   //import manager.js objects
+const   Engineer    =   require("./lib/engineer");  //import engineer.js objects
+const   Intern      =   require("./lib/intern");    //import intern.js objects
+const   inquirer    =   require("inquirer");        //import inquirer version 8.2.4
+const   path        =   require("path");            //import path function to use in file navigation
+const   fs          =   require("fs");              //import fs functions
 
 const DIST_DIR      = path.resolve(__dirname,"dist");
 const distPath      = path.join(DIST_DIR,"team.html");
 
+const render        = require("./lib/htmlCreate");
+
 // Code to use inquirer to gather information about team members,
 // and to create objects for each team member.
-
+// create team members array 
 const teamMembers = [];
-
+//Upon initiation call the manager input request
 function start() {
     managerQuery();
 }
-
+//input questions for Manager
 function managerQuery(){
     inquirer
         .prompt([
@@ -48,9 +50,9 @@ function managerQuery(){
             value.email,
             value.officeNumber
         );
-        console.table(manager);
-        teamMembers.push(manager);
-        addTeamMember();
+        console.table(manager); // show values for team members
+        teamMembers.push(manager); //push values into team members array
+        addTeamMember(); //run the remaining team members questions
     });
 }
 
@@ -66,15 +68,15 @@ function addTeamMember(){
         ])
         .then((value)=>{
             if(value.whatRole === "Engineer"){
-                engineerQuery();
+                engineerQuery();    // if selected go to engineer input questions
             }else if (value.whatRole === "Intern"){
-                internQuery();
+                internQuery();      // if selected go to intern input questions
             }else{
-                createFile();
+                createFile();       // if selected create html file with just manager information
             }
         });
 }
-
+//input questions for engineer
 function engineerQuery(){
     inquirer
         .prompt([
@@ -101,9 +103,9 @@ function engineerQuery(){
         ])
         .then((value)=>{
             const engineer = new Engineer(value.name, value.id, value.email, value.github);
-            console.table(engineer);
-            teamMembers.push(engineer);
-            addTeamMember();
+            console.table(engineer);        // show values for team members
+            teamMembers.push(engineer);     //push values into team members array
+            addTeamMember();                //run the remaining team members questions
         });
 }
 
@@ -133,12 +135,12 @@ function internQuery(){
         ])
         .then((value)=> {
             const intern = new Intern(value.name, value.id, value.email, value.school);
-            console.table(intern);
-            teamMembers.push(intern);
-            addTeamMember();
+            console.table(intern);          // show values for team members
+            teamMembers.push(intern);       //push values into team members array
+            addTeamMember();                //run the remaining team members questions
         })
 }
-
+//create html file in dist directory
 function createFile(){
     if(!fs.existsSync(DIST_DIR)){
         fs.mkdirSync(DIST_DIR);
@@ -147,7 +149,5 @@ function createFile(){
         console.log("File created in dist folder");
     }
 }
-
-
 
 start();
