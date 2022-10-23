@@ -5,6 +5,9 @@ const   inquirer    =   require("inquirer");
 const   path        =   require("path");
 const   fs          =   require("fs");
 
+const DIST_DIR      = path.resolve(__dirname,"dist");
+const distPath      = path.join(DIST_DIR,"team.html");
+
 // Code to use inquirer to gather information about team members,
 // and to create objects for each team member.
 
@@ -134,6 +137,15 @@ function internQuery(){
             teamMembers.push(intern);
             addTeamMember();
         })
+}
+
+function createFile(){
+    if(!fs.existsSync(DIST_DIR)){
+        fs.mkdirSync(DIST_DIR);
+    }else {
+        fs.writeFileSync(distPath,render(teamMembers),"utf-8");
+        console.log("File created in dist folder");
+    }
 }
 
 
