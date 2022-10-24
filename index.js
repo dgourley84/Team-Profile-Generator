@@ -8,7 +8,7 @@ const   fs          =   require("fs");              //import fs functions
 const DIST_DIR      = path.resolve(__dirname,"dist");
 const distPath      = path.join(DIST_DIR,"team.html");
 
-const render        = require("./lib/htmlCreate");
+const render        = require("./lib/htmlRenderer");
 
 // Code to use inquirer to gather information about team members,
 // and to create objects for each team member.
